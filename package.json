@@ -1,0 +1,15 @@
+{
+  "name": "discordv12-music-bot",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "dependencies": {
+    "@discordjs/opus": "^0.5.3",
+    "discord.js": "^12.5.3",
+    "ffmpeg-static": "^4.4.1",
+    "ytdl-core": "^4.10.0",
+    "ytsr": "^3.6.0"
+  }
+}
