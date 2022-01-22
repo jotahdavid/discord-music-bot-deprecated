@@ -4,8 +4,20 @@ const { join } = require('path');
 
 const client = new Discord.Client();
 
-client.config = require('../config.json');
+try {
+  client.config = require('../config.json');
+} catch (err) {
+  throw new Error('config.json is empty or missing in root folder');
+}
+
 const { prefix, token } = client.config;
+
+if (!token) {
+  throw new Error('token is missing in config.json file');
+}
+if (!prefix) {
+  throw new Error('prefix is missing in config.json file');
+}
 
 console.log('Inicializando o BOT...');
 
