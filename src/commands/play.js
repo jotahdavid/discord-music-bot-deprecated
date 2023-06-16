@@ -1,7 +1,13 @@
 const { Client, Message } = require('discord.js');
-const connection = require('./connection.var.js');
+const {
+  createAudioResource,
+  createAudioPlayer,
+  AudioPlayerStatus,
+} = require('@discordjs/voice');
 const ytdl = require('ytdl-core');
 const ytsr = require('ytsr');
+
+const connection = require('./connection.var.js');
 
 /**
  * @param {Client} client
@@ -19,27 +25,33 @@ module.exports = async (client, msg, args) => {
     );
   }
 
-  const searchResults = (await ytsr(args.join(' '), { limit: 3 })).items;
-  const videoLink = searchResults.find((video) => video.type === 'video')?.url;
-
-  if (!ytdl.validateURL(videoLink)) {
-    return await msg.reply(
-      ':red_circle: Link inválido! Envie um link de um vídeo do YouTube: !play <link>'
-    );
-  }
-
   try {
-    const audio = ytdl(videoLink, { filter: 'audioonly' });
+    const searchResults = (await ytsr(args.join(' '), { limit: 5 })).items;
+    const videoLink = searchResults.find(
+      (video) => video.type === 'video' && !video.badges.includes('LIVE')
+    )?.url;
+
+    if (!ytdl.validateURL(videoLink)) {
+      return await msg.reply(
+        ':red_circle: Link inválido! Envie um link de um vídeo do YouTube: !play <link>'
+      );
+    }
+
+    const stream = ytdl(videoLink, { filter: 'audioonly' });
     const videoInfo = (await ytdl.getBasicInfo(videoLink)).videoDetails;
 
-    connection.dispatcher = connection.channel.play(audio, { volume: 0.8 });
+    const player = createAudioPlayer();
+    const audio = createAudioResource(stream);
+
+    connection.dispatcher = connection.channel.subscribe(player);
+    connection.dispatcher.player.play(audio);
 
     await msg.channel.send(
       `:arrow_forward: Reproduzindo: **${videoInfo.title}**\n` +
       videoLink
     );
 
-    connection.dispatcher.on('finish', async () => {
+    connection.dispatcher.player.on(AudioPlayerStatus.Idle, async () => {
       await msg.channel.send('**:white_check_mark:  A música acabou!**');
     });
   } catch (e) {

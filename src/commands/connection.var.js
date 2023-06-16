@@ -1,5 +1,4 @@
-const { VoiceConnection } = require('@discordjs/voice');
-const { StreamDispatcher } = require('discord.js');
+const { VoiceConnection, PlayerSubscription } = require('@discordjs/voice');
 
 module.exports = {
   /**
@@ -7,7 +6,7 @@ module.exports = {
    */
   channel: null,
   /**
-   * @type {StreamDispatcher | null}
+   * @type {PlayerSubscription | null}
    */
   dispatcher: null
 };
