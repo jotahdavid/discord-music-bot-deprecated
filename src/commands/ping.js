@@ -6,5 +6,5 @@ const { Client, Message } = require('discord.js');
  */
 module.exports = async (client, msg) => {
   const botMessage = await msg.channel.send(`Pong!`);
-  return await botMessage.edit(`Ping: **${msg.createdTimestamp - botMessage.createdTimestamp}ms**`);
+  return await botMessage.edit(`Ping: **${botMessage.createdTimestamp - msg.createdTimestamp}ms**`);
 };
