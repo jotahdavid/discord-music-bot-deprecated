@@ -73,3 +73,13 @@ client.on('messageCreate', async (msg) => {
 });
 
 client.login(token);
+
+function handleProcessEnd() {
+  console.log('\nDesligando o BOT...');
+  client.destroy();
+  process.off('exit', handleProcessEnd);
+  process.exit();
+}
+
+process.on('SIGINT', handleProcessEnd);
+process.on('exit', handleProcessEnd);
