@@ -1,4 +1,5 @@
-const { VoiceConnection, StreamDispatcher } = require('discord.js');
+const { VoiceConnection } = require('@discordjs/voice');
+const { StreamDispatcher } = require('discord.js');
 
 module.exports = {
   /**
