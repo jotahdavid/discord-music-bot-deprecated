@@ -1,8 +1,20 @@
-const Discord = require('discord.js');
+const {
+  Client,
+  Collection,
+  GatewayIntentBits,
+} = require('discord.js');
 const { readdirSync } = require('fs');
 const { join } = require('path');
 
-const client = new Discord.Client();
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildVoiceStates,
+  ],
+});
 
 try {
   client.config = require('../config.json');
@@ -25,7 +37,7 @@ client.once('ready', () => {
   console.log('BOT está online!');
 });
 
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 
 console.log('Carregando todos os comandos...');
 const commandFiles = readdirSync(join(__dirname, 'commands')).filter(
@@ -39,7 +51,7 @@ for (file of commandFiles) {
 }
 console.log('Todos os comandos foram carregados!');
 
-client.on('message', async (msg) => {
+client.on('messageCreate', async (msg) => {
   if (!msg.content.startsWith(prefix) || msg.author.bot || msg.channel.type === 'DM') {
     return;
   }
