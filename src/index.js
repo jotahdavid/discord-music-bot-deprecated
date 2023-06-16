@@ -2,6 +2,7 @@ const {
   Client,
   Collection,
   GatewayIntentBits,
+  Events,
 } = require('discord.js');
 const { readdirSync } = require('fs');
 const { join } = require('path');
@@ -33,7 +34,7 @@ if (!prefix) {
 
 console.log('Inicializando o BOT...');
 
-client.once('ready', () => {
+client.once(Events.ClientReady, () => {
   console.log('BOT está online!');
 });
 
@@ -51,7 +52,7 @@ for (file of commandFiles) {
 }
 console.log('Todos os comandos foram carregados!');
 
-client.on('messageCreate', async (msg) => {
+client.on(Events.MessageCreate, async (msg) => {
   if (!msg.content.startsWith(prefix) || msg.author.bot || msg.channel.type === 'DM') {
     return;
   }
