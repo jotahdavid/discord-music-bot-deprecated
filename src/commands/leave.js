@@ -14,9 +14,9 @@ module.exports = async (client, msg) => {
     await msg.reply(':dash: Saindo...');
     await connection.channel.disconnect();
     connection.channel = null;
-    if (connection.dispatcher) {
-      await connection.dispatcher.destroy();
-      connection.dispatcher = null;
+    if (connection.subscription) {
+      await connection.subscription.destroy();
+      connection.subscription = null;
     }
   } catch (e) {
     console.log('Não consegui sair da chamada', e);

@@ -40,20 +40,31 @@ module.exports = async (client, msg, args) => {
     const stream = ytdl(videoLink, { filter: 'audioonly' });
     const videoInfo = (await ytdl.getBasicInfo(videoLink)).videoDetails;
 
-    const player = createAudioPlayer();
+    connection.videoInfo = videoInfo;
+
+    if (!connection.subscription) {
+      const player = createAudioPlayer();
+      connection.subscription = connection.channel.subscribe(player);
+
+      connection.subscription.player.on(AudioPlayerStatus.Playing, async () => {
+        if (!connection.videoInfo) return;
+
+        await msg.channel.send(
+          `:arrow_forward: Reproduzindo: **${connection.videoInfo.title}**\n` +
+          connection.videoInfo.video_url
+        );
+      });
+
+      connection.subscription.player.on(AudioPlayerStatus.Idle, async () => {
+        if (connection.audio?.ended) {
+          await msg.channel.send('**:white_check_mark:  A música acabou!**');
+        }
+      });
+    }
+
     const audio = createAudioResource(stream);
-
-    connection.dispatcher = connection.channel.subscribe(player);
-    connection.dispatcher.player.play(audio);
-
-    await msg.channel.send(
-      `:arrow_forward: Reproduzindo: **${videoInfo.title}**\n` +
-      videoLink
-    );
-
-    connection.dispatcher.player.on(AudioPlayerStatus.Idle, async () => {
-      await msg.channel.send('**:white_check_mark:  A música acabou!**');
-    });
+    connection.audio = audio;
+    connection.subscription.player.play(audio);
   } catch (e) {
     console.log('Não consegui reproduzir a música', e);
     await msg.reply(':red_circle: Não consegui reproduzir a música');

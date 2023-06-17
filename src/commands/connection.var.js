@@ -1,4 +1,8 @@
-const { VoiceConnection, PlayerSubscription } = require('@discordjs/voice');
+const { VoiceConnection, PlayerSubscription, AudioResource } = require('@discordjs/voice');
+
+/**
+ * @typedef {import('ytdl-core').MoreVideoDetails} MoreVideoDetails
+ */
 
 module.exports = {
   /**
@@ -8,5 +12,13 @@ module.exports = {
   /**
    * @type {PlayerSubscription | null}
    */
-  dispatcher: null
+  subscription: null,
+  /**
+   * @type {MoreVideoDetails | null}
+   */
+  videoInfo: null,
+  /**
+   * @type {AudioResource | null}
+   */
+  audio: null,
 };
