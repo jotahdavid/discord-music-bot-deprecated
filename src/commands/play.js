@@ -16,12 +16,14 @@ const connection = require('./connection.var.js');
  */
 module.exports = async (client, msg, args) => {
   if (!connection.channel) {
-    return await msg.reply('Eu não estou em um canal de voz, use: **!join**');
+    return await msg.reply(
+      `Eu não estou em um canal de voz, use: **${client.config.prefix}join**`
+    );
   }
 
   if (args.length === 0) {
     return await msg.reply(
-      'Você precisa enviar o link ou nome da música: **!play <link/nome>**'
+      `Você precisa enviar o link ou nome da música: **${client.config.prefix}play <link/nome>**`
     );
   }
 
@@ -33,7 +35,7 @@ module.exports = async (client, msg, args) => {
 
     if (!ytdl.validateURL(videoLink)) {
       return await msg.reply(
-        ':red_circle: Link inválido! Envie um link de um vídeo do YouTube: !play <link>'
+        `:red_circle: Link inválido! Envie um link de um vídeo do YouTube: ${client.config.prefix}play <link>`
       );
     }
 

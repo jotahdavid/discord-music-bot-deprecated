@@ -7,7 +7,9 @@ const connection = require('./connection.var.js');
  */
 module.exports = async (client, msg) => {
   if (!connection.channel) {
-    return await msg.reply('Eu não estou em um canal de voz, use: **!join**');
+    return await msg.reply(
+      `Eu não estou em um canal de voz, use: **${client.config.prefix}join**`
+    );
   }
 
   try {

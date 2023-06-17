@@ -14,7 +14,9 @@ module.exports = async (client, msg, args) => {
 
   if (connection.channel) {
     if (connection.channel.joinConfig.channelId === msg.member.voice.channelId) {
-      return await msg.reply('Eu já estou no canal, para tocar música use: **!play <link>**');
+      return await msg.reply(
+        `Eu já estou no canal, para tocar música use: **${client.config.prefix}play <link>**`
+      );
     }
 
     connection.channel.disconnect();

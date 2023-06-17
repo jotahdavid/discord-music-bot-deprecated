@@ -7,7 +7,9 @@ const connection = require('./connection.var.js');
  */
 module.exports = async (client, msg) => {
   if (!connection.subscription) {
-    return await msg.reply('Eu não estou tocando nada, use: **!play <link>**');
+    return await msg.reply(
+      `Eu não estou tocando nada, use: **${client.config.prefix}play <link>**`
+    );
   }
 
   try {
